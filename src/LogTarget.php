@@ -12,6 +12,7 @@ abstract class LogTarget implements LoggerInterface
      * will be the database name and $path will be the table name.  If the target is a file, the $name
      * will be the file name, and $path will be a discrete system path.
      * @param string $name a target identifier
+     * @param string $path
      * @return bool
      */
     abstract function targetCreate(string $name,string $path=''):bool;
@@ -21,6 +22,7 @@ abstract class LogTarget implements LoggerInterface
      * will be the database name and $path will be the table name.  If the target is a file, the $name
      * will be the file name, and $path will be a discrete system path.
      * @param string $name
+     * @param string $path
      * @return bool
      */
     abstract function targetExists(string $name,string $path=''):bool;
