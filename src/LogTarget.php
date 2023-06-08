@@ -2,7 +2,7 @@
 
 namespace FoamyCastle\Log;
 
-interface LogFileInterface
+interface LogTarget
 {
     function write($data);
     function closeFile():bool;
