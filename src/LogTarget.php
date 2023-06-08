@@ -15,7 +15,7 @@ abstract class LogTarget implements LoggerInterface
      * @param string $path
      * @return bool
      */
-    abstract function targetCreate(string $name,string $path=''):bool;
+    abstract protected function targetCreate(string $name,string $path=''):bool;
 
     /**
      * Verifies the existences of a target. If the target is a database, the $name
@@ -25,7 +25,7 @@ abstract class LogTarget implements LoggerInterface
      * @param string $path
      * @return bool
      */
-    abstract function targetExists(string $name,string $path=''):bool;
+    abstract protected function targetExists(string $name,string $path=''):bool;
 
     /**
      * Prepare a target to receive log messages.
@@ -34,7 +34,7 @@ abstract class LogTarget implements LoggerInterface
      * @param array $options
      * @return bool
      */
-    abstract function targetMakeReady(string $name, string $path='', array $options=[]):bool;
+    abstract protected function targetMakeReady(string $name, string $path='', array $options=[]):bool;
 
     /**
      * Remove the target resource from the system.  For databases, a supplied $path argument will attempt to remove
@@ -46,34 +46,34 @@ abstract class LogTarget implements LoggerInterface
      * @param string $path
      * @return bool
      */
-    abstract function targetUnset(string $name,string $path=''):bool;
+    abstract protected function targetUnset(string $name,string $path=''):bool;
 
     /**
      * Erase all committed messages on a target without destroying the target
      * @param string $name
      * @return bool true if successful
      */
-    abstract function targetClear(string $name):bool;
+    abstract protected function targetClear(string $name):bool;
 
     /**
      * Set a static array of context options to be used in each message commit. key=>value pairs.
      * @param array<string,string|int|object|array|float|bool> $options
      * @return static
      */
-    abstract function setContextOptions(...$options):static;
+    abstract protected function setContextOptions(...$options):static;
 
     /**
      * Returns the entire array of context options currently set. If no options are set, an empty array
      * is returned.
      * @return array
      */
-    abstract function getContextOptions():array;
+    abstract protected function getContextOptions():array;
     /**
      * Remove a single or many context option(s) given its(their) key(s)
      * @param string|array $key
      * @return bool
      */
-    abstract function removeContextOptions(string|array $key):bool;
+    abstract protected function removeContextOptions(string|array $key):bool;
 
     /**
      * An invokable commit method
@@ -82,26 +82,26 @@ abstract class LogTarget implements LoggerInterface
      * @param array $context context options given here override options set with setContextOptions()
      * @return bool returns true if the message commit was successful
      */
-    abstract function __invoke(LogLevel $level,string $message,array $context=[]):bool;
+    abstract protected function __invoke(LogLevel $level,string $message,array $context=[]):bool;
 
     /**
      * Sets the format in which log messages will be committed
      * @param string $format
      * @return static
      */
-    abstract function setMessageFormat(string $format):static;
+    abstract protected function setMessageFormat(string $format):static;
 
     /**
      * Returns the currently used log message format
      * @return string
      */
-    abstract function getMessageFormat():string;
+    abstract protected function getMessageFormat():string;
 
     /**
      * Set a static log level to be used in message commits
      * @param LogLevel $level
      * @return static
      */
-    abstract function setLogLevel(LogLevel $level):static;
+    abstract protected function setLogLevel(LogLevel $level):static;
 
 }
