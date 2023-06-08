@@ -46,6 +46,13 @@ interface LogTargetInterface
     function targetUnset(string $name,string $path=''):bool;
 
     /**
+     * Erase all committed messages on a target without destroying the target
+     * @param string $name
+     * @return bool true if successful
+     */
+    function targetClear(string $name):bool;
+
+    /**
      * Set a static array of context options to be used in each message commit. key=>value pairs.
      * @param array<string,string|int|object|array|float|bool> $options
      * @return LogTargetInterface
