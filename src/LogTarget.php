@@ -56,9 +56,9 @@ abstract class LogTarget implements LoggerInterface
     /**
      * Set a static array of context options to be used in each message commit. key=>value pairs.
      * @param array<string,string|int|object|array|float|bool> $options
-     * @return LogTargetInterface
+     * @return static
      */
-    abstract function setContextOptions(...$options):LogTargetInterface;
+    abstract function setContextOptions(...$options):static;
 
     /**
      * Returns the entire array of context options currently set. If no options are set, an empty array
@@ -85,9 +85,9 @@ abstract class LogTarget implements LoggerInterface
     /**
      * Sets the format in which log messages will be committed
      * @param string $format
-     * @return LogTargetInterface
+     * @return static
      */
-    abstract function setMessageFormat(string $format):LogTargetInterface;
+    abstract function setMessageFormat(string $format):static;
 
     /**
      * Returns the currently used log message format
@@ -98,8 +98,8 @@ abstract class LogTarget implements LoggerInterface
     /**
      * Set a static log level to be used in message commits
      * @param LogLevel $level
-     * @return LogTargetInterface
+     * @return static
      */
-    abstract function setLogLevel(LogLevel $level):LogTargetInterface;
+    abstract function setLogLevel(LogLevel $level):static;
 
 }
