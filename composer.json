@@ -3,6 +3,7 @@
   "description": "",
   "license": "GPL-3.0-or-later",
   "prefer-stable": false,
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Aaron Sollman",
@@ -11,7 +12,8 @@
   ],
   "require": {
     "php": ">=8.0",
-    "psr/log": "3.0.0"
+    "psr/log": "3.0.0",
+    "foamycastle/contextproc": "dev-main"
   },
   "require-dev": {
     "phpunit/phpunit": "10.2.1"
