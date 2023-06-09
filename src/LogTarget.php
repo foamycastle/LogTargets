@@ -64,21 +64,14 @@ abstract class LogTarget implements LoggerInterface
     abstract protected function writeMessage(string $message):bool;
 
     /**
-     * Create a target which will accept messages for commit. If the target is a database, the $name
-     * will be the database name and $path will be the table name.  If the target is a file, the $name
-     * will be the file name, and $path will be a discrete system path.
-     * @param string $name a target identifier
-     * @param string $path
+     * Create a target which will accept messages for commit.
+     * @param array $options
      * @return bool
      */
     abstract protected function targetCreate(string $name,string $path=''):bool;
 
     /**
-     * Verifies the existences of a target. If the target is a database, the $name
-     * will be the database name and $path will be the table name.  If the target is a file, the $name
-     * will be the file name, and $path will be a discrete system path.
-     * @param string $name
-     * @param string $path
+     * Verifies the existences of a target.
      * @return bool
      */
     abstract protected function targetExists(string $name,string $path=''):bool;
@@ -93,13 +86,7 @@ abstract class LogTarget implements LoggerInterface
     abstract protected function targetMakeReady(string $name, string $path='', array $options=[]):bool;
 
     /**
-     * Remove the target resource from the system.  For databases, a supplied $path argument will attempt to remove
-     * only the table to which messages were committed.  An omitted $path argument will attempt to remove the
-     * entire database to which log messages were committed.  For files, $name is the filename of the log target and
-     * $path is the system path in which the target is located. $path may be omitted if php will not require a discrete
-     * path to locate the file.
-     * @param string $name
-     * @param string $path
+     * Remove the target resource from the system.
      * @return bool
      */
     abstract protected function targetUnset(string $name,string $path=''):bool;
@@ -129,16 +116,7 @@ abstract class LogTarget implements LoggerInterface
      * @param string|array $key
      * @return bool
      */
-    abstract protected function removeContextOptions(string|array $key):bool;
-
-    /**
-     * An invokable commit method
-     * @param LogLevel $level log level 0-7
-     * @param string $message log message
-     * @param array $context context options given here override options set with setContextOptions()
-     * @return bool returns true if the message commit was successful
-     */
-    abstract protected function __invoke(LogLevel $level,string $message,array $context=[]):bool;
+    abstract function removeContextOptions(string|array $key):bool;
 
     /**
      * Sets the format in which log messages will be committed
@@ -151,10 +129,18 @@ abstract class LogTarget implements LoggerInterface
      * Returns the currently used log message format
      * @return string
      */
-    abstract protected function getMessageFormat():string;
+    abstract function getMessageFormat():string;
 
     /**
-     * Set a static log level to be used in message commits
+     * Replaces all formatting symbols with data
+     * @param string $message string to be formatted. passed by reference
+     * @return void
+     */
+
+    abstract protected function formatMessage(string &$message):void;
+
+    /**
+     * Set a default log level to be used with the __invoke() method
      * @param LogLevel $level
      * @return static
      */
