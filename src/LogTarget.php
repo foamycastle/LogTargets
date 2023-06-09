@@ -4,6 +4,7 @@ namespace FoamyCastle\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use FoamyCastle\Utils\ContextProcessor;
 
 abstract class LogTarget implements LoggerInterface
 {
