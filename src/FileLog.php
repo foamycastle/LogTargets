@@ -4,7 +4,7 @@ namespace FoamyCastle\Log;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
 
-class FileLog extends LogTarget
+final class FileLog extends LogTarget
 {
     /**
      * If no filename is provided at instantiation, this will be used as a substitute
