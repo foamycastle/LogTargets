@@ -88,7 +88,7 @@ abstract class LogTarget
      * @return bool true if successful
      */
     abstract protected function targetClear(): bool;
-
+    abstract protected function formatMessage(string &$message):void;
 
     /**
      * Write the string to the resource or database
@@ -225,19 +225,6 @@ abstract class LogTarget
             }
             return false;
         }
-    }
-
-    /**
-     * Replaces all formatting symbols with data
-     * @param string $message string to be formatted. passed by reference
-     * @return void
-     */
-    function formatMessage(string &$message): void
-    {
-        $format = $this->messageFormat == "" ? self::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
-        $message = str_replace(self::FORMAT_MESSAGE, $message, $format);
-        $message = str_replace(self::FORMAT_LEVEL, self::LOG_LEVEL[$this->currentLogLevel], $message);
-        $message = str_replace(self::FORMAT_TIMESTAMP, (new DateTime())->format(DATE_RFC3339), $message);
     }
 
     function isWritable(): bool

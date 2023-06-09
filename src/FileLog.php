@@ -127,6 +127,19 @@ final class FileLog extends LogTarget
     }
 
     /**
+     * Replaces all formatting symbols with data
+     * @param string $message string to be formatted. passed by reference
+     * @return void
+     */
+    function formatMessage(string &$message): void
+    {
+        $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
+        $message = str_replace(LogTarget::FORMAT_MESSAGE, $message, $format);
+        $message = str_replace(LogTarget::FORMAT_LEVEL, LogTarget::LOG_LEVEL[$this->currentLogLevel], $message);
+        $message = str_replace(LogTarget::FORMAT_TIMESTAMP, (new DateTime())->format(DATE_RFC3339), $message);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function targetUnset(): bool
