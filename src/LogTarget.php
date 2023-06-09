@@ -189,7 +189,7 @@ abstract class LogTarget
      * @param array<string,string|int|object|array|float|bool> $options
      * @return static
      */
-    abstract function setContextOptions(...$options): static;
+    abstract function setContextOptions(array $options): static;
 
     /**
      * Returns the entire array of context options currently set. If no options are set, an empty array
