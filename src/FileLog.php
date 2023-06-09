@@ -148,7 +148,7 @@ final class FileLog extends LogTarget
     /**
      * @inheritDoc
      */
-    function setContextOptions(...$options): static
+    function setContextOptions(array $options): static
     {
         foreach ($options as $optionKey=>$optionValue) {
             if(key_exists($optionKey,$this->contextOptions)){
