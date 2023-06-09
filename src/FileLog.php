@@ -80,6 +80,7 @@ final class FileLog extends LogTarget
     {
         $this->formatMessage($message);
         $message = ContextProcessor::Replace($message,$this->getContextOptions());
+        $message .= str_ends_with($message,PHP_EOL) ?: PHP_EOL;
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
         }
