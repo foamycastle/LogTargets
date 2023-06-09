@@ -150,14 +150,7 @@ final class FileLog extends LogTarget
      */
     function setContextOptions(array $options): static
     {
-        foreach ($options as $optionKey=>$optionValue) {
-            if(key_exists($optionKey,$this->contextOptions)){
-                unset($this->contextOptions[$optionKey]);
-                $this->contextOptions[$optionKey]=$optionValue;
-                continue;
-            }
-            $this->contextOptions[$optionKey]=$optionValue;
-        }
+        $this->contextOptions=$options;
         return $this;
     }
 
