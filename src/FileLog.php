@@ -43,6 +43,13 @@ class FileLog extends LogTarget
         }else{
             throw new PathNotWritable($path);
         }
+        if(!$this->targetMakeReady()){
+            throw new PathNotWritable($path);
+        }
+        $this->setDefaultLogLevel(7);
+        $this->setCurrentLogLevel(7);
+        $this->setMessageFormat(self::DEFAULT_MESSAGE_FORMAT);
+
 
     }
     private function writePermissionsCheck($filename,$path):bool{
