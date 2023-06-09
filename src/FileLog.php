@@ -152,15 +152,6 @@ final class FileLog extends LogTarget
     /**
      * @inheritDoc
      */
-    function setContextOptions(array $options): static
-    {
-        $this->contextOptions=$options;
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
     function getContextOptions(): array
     {
         return $this->contextOptions;
