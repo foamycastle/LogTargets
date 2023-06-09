@@ -56,6 +56,39 @@ abstract class LogTarget
      * @var array $contextOptions
      */
     protected array $contextOptions = [];
+    /**
+     * Create a target which will accept messages for commit.
+     * @param array $options
+     * @return bool
+     */
+    abstract protected function targetCreate(array $options = []): mixed;
+
+    /**
+     * Verifies the existences of a target.
+     * @return bool
+     */
+    abstract protected function targetExists(): bool;
+
+    /**
+     * Prepare a target to receive log messages.
+     * @param array $options
+     * @return bool
+     */
+    abstract protected function targetMakeReady(array $options = []): bool;
+
+    /**
+     * Remove the target resource from the system.
+     * @return bool
+     */
+    abstract protected function targetUnset(): bool;
+
+    /**
+     * Erase all committed messages on a target without destroying the target
+     * @param string $name
+     * @return bool true if successful
+     */
+    abstract protected function targetClear(): bool;
+
 
     /**
      * Write the string to the resource or database
@@ -168,39 +201,6 @@ abstract class LogTarget
         $this->contextOptions=$options;
         return $this;
     }
-
-    /**
-     * Create a target which will accept messages for commit.
-     * @param array $options
-     * @return bool
-     */
-    abstract protected function targetCreate(array $options = []): mixed;
-
-    /**
-     * Verifies the existences of a target.
-     * @return bool
-     */
-    abstract protected function targetExists(): bool;
-
-    /**
-     * Prepare a target to receive log messages.
-     * @param array $options
-     * @return bool
-     */
-    abstract protected function targetMakeReady(array $options = []): bool;
-
-    /**
-     * Remove the target resource from the system.
-     * @return bool
-     */
-    abstract protected function targetUnset(): bool;
-
-    /**
-     * Erase all committed messages on a target without destroying the target
-     * @param string $name
-     * @return bool true if successful
-     */
-    abstract protected function targetClear(): bool;
 
     /**
      * Remove a single or many context option(s) given its(their) key(s)
