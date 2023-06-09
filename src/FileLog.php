@@ -1,0 +1,296 @@
+<?php
+
+namespace FoamyCastle\Log;
+
+use DateTime;
+use FoamyCastle\Log\Exception\PathNotWritable;
+use FoamyCastle\Utils\ContextProcessor;
+use Psr\Log\LogLevel;
+use Stringable;
+
+class FileLog extends LogTarget
+{
+    /**
+     * If no filename is provided at instantiation, this will be used as a substitute
+     */
+    private const DEFAULT_FILENAME='logfile.log';
+    private const DEFAULT_DIRNAME='tmplogs';
+    /**
+     * the log file name
+     * @var string $fileName
+     */
+    private string $fileName;
+
+    /**
+     * The file system path to the log file
+     * @var string $pathName
+     */
+    private string $pathName;
+    /**
+     * A full assembly of $fileName and $pathName
+     * @var string $logFilePath
+     */
+    private string $logFilePath;
+    /**
+     * The php resource against which write operations will be run
+     * @var resource $fileResource
+     */
+    private $fileResource;
+
+    public function __construct(string $fileName="", $path="")
+    {
+        if($fileName=="") $fileName=self::DEFAULT_FILENAME;
+        if($this->writePermissionsCheck($fileName,$path)){
+            $this->fileName=$fileName;
+            $this->pathName=(str_ends_with($path,DIRECTORY_SEPARATOR)?$path:$path.DIRECTORY_SEPARATOR);
+            $this->logFilePath=$this->pathName.$this->fileName;
+        }else{
+            throw new PathNotWritable($path);
+        }
+
+    }
+    private function writePermissionsCheck($filename,$path):bool{
+        $path=($path==""?__DIR__.DIRECTORY_SEPARATOR.self::DEFAULT_DIRNAME:$path);
+        if(is_writable($path)){
+            $path=(str_ends_with($path,DIRECTORY_SEPARATOR)?$path:$path.DIRECTORY_SEPARATOR);
+            if(file_exists($path.$filename)){
+                return is_writable($path.$filename);
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * @inheritDoc
+     */
+    protected function writeMessage(string $message): bool
+    {
+        if($this->isWriteable){
+            return (false!==fwrite($this->fileResource,$message,strlen($message)));
+        }
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function targetCreate(array $options=[]):mixed
+    {
+        return @fopen($this->logFilePath,'w');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function targetExists(): bool
+    {
+        if(!isset($this->logFilePath)) return false;
+        return file_exists($this->logFilePath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function targetMakeReady(array $options = []): bool
+    {
+        if(!isset($this->logFilePath)) return false;
+        //file does not exist, create it
+        if(!$this->targetExists()){
+            $this->fileResource=$this->targetCreate();
+            $this->isWriteable=true;
+            return true;
+        }
+
+        //file exists, open it
+        $this->fileResource=@fopen($this->logFilePath,'a');
+        if(is_resource($this->fileResource)){
+            $this->isWriteable=true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function targetUnset(): bool
+    {
+        $this->isWriteable=false;
+        return unlink($this->logFilePath);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function targetClear(): bool
+    {
+        if(!isset($this->logFilePath)) return false;
+        if($this->targetExists()){
+            $this->fileResource=$this->targetCreate();
+            $this->isWriteable=false;
+            return fclose($this->fileResource);
+        }
+        return false;
+    }
+    /**
+     * @inheritDoc
+     */
+    protected function formatMessage(string &$message): void
+    {
+        $format=$this->messageFormat==""?self::DEFAULT_MESSAGE_FORMAT:$this->messageFormat;
+        $message=str_replace(self::FORMAT_MESSAGE,$message,$format);
+        $message=str_replace(self::FORMAT_LEVEL,self::LOG_LEVEL[$this->currentLogLevel],$message);
+        $message=str_replace(self::FORMAT_TIMESTAMP,(new DateTime())->format(DATE_RFC3339),$message);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function setContextOptions(...$options): static
+    {
+        foreach ($options as $optionKey=>$optionValue) {
+            if(key_exists($optionKey,$this->contextOptions)){
+                unset($this->contextOptions[$optionKey]);
+                $this->contextOptions[$optionKey]=$optionValue;
+                continue;
+            }
+            $this->contextOptions[$optionKey]=$optionValue;
+        }
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function getContextOptions(): array
+    {
+        return $this->contextOptions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function removeContextOptions(array|string $key): bool
+    {
+        $hasRemoveSomething=false;
+        if(is_array($key)){
+            foreach ($key as $item){
+                if(key_exists($item,$this->contextOptions)) {
+                    unset($this->contextOptions[$item]);
+                    $hasRemoveSomething=true;
+                }
+            }
+            return $hasRemoveSomething;
+        }else{
+            if(key_exists($key,$this->contextOptions)) {
+                unset($this->contextOptions[$key]);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function setMessageFormat(string $format): static
+    {
+        $this->messageFormat=$format;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function getMessageFormat(): string
+    {
+        return $this->messageFormat;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function setDefaultLogLevel(LogLevel $level): static
+    {
+        $this->defaultLogLevel=array_search($level,self::LOG_LEVEL);
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function emergency(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::EMERGENCY,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function alert(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::ALERT,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function critical(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::CRITICAL,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function error(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::ERROR,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function warning(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::WARNING,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function notice(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::NOTICE,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function info(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::INFO,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function debug(Stringable|string $message, array $context = []): void
+    {
+        $this->log(LogLevel::DEBUG,$message,$context);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function log($level, Stringable|string $message, array $context = []): void
+    {
+        $this->currentLogLevel=array_search($level,self::LOG_LEVEL);
+        if($this->isWriteable){
+            $message=ContextProcessor::Replace($message,empty($context)?$this->contextOptions:$context);
+            $this->formatMessage($message);
+            $this->writeMessage($message).PHP_EOL;
+        }
+    }
+}
