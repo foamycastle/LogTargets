@@ -91,7 +91,7 @@ abstract class LogTarget
     {
         if(is_string($level)){
             $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(!$level) $level=7;
+            if(false===$level) $level=7;
         }
         if ($level > 7 || $level < 0) $level = 7;
         $this->defaultLogLevel = $level;
@@ -123,7 +123,7 @@ abstract class LogTarget
     {
         if(is_string($level)){
             $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(!$level) $level=7;
+            if(false===$level) $level=7;
         }
         if ($level > 7 || $level < 0) $level = 7;
         $this->currentLogLevel = $level;
