@@ -21,6 +21,8 @@ abstract class LogTarget
         6 => LogLevel::INFO,
         7 => LogLevel::DEBUG
     ];
+    public const UPPERCASE = 1;
+    public const LOWERCASE = 2;
     /**
      * Indicates whether the process is able to and/or has permissions to write log messages.
      * @var bool true if log messages may br written to the filesystem
@@ -58,6 +60,21 @@ abstract class LogTarget
     /**
      * Write the string to the resource or database
      * @param string $message
+     * @return bool
+     */
+    abstract function writeMessage(string $message): bool;
+
+    /**
+     * @inheritDoc
+     */
+    function setMessageFormat(string $format): static
+    {
+        $this->messageFormat = $format;
+        return $this;
+    }
+
+    /**
+     * Returns the message format string
      * @return string
      */
     function getMessageFormat(): string
@@ -186,19 +203,6 @@ abstract class LogTarget
      * @return bool
      */
     abstract function removeContextOptions(string|array $key): bool;
-
-    /**
-     * Sets the format in which log messages will be committed
-     * @param string $format
-     * @return static
-     */
-    abstract function setMessageFormat(string $format):static;
-
-    /**
-     * Returns the currently used log message format
-     * @return string
-     */
-    abstract function getMessageFormat():string;
 
     /**
      * Replaces all formatting symbols with data
