@@ -184,13 +184,9 @@ class FileLog extends LogTarget
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    function setMessageFormat(string $format): static
+    public function isWritable(): bool
     {
-        $this->messageFormat=$format;
-        return $this;
+        return $this->isWriteable;
     }
 
 }

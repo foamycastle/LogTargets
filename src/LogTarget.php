@@ -4,7 +4,6 @@ namespace FoamyCastle\Log;
 
 use DateTime;
 use Psr\Log\LogLevel;
-use FoamyCastle\Utils\ContextProcessor;
 
 abstract class LogTarget
 {
@@ -61,7 +60,79 @@ abstract class LogTarget
      * @param string $message
      * @return string
      */
-    abstract protected function writeMessage(string $message):bool;
+    function getMessageFormat(): string
+    {
+        return $this->messageFormat;
+    }
+
+    /**
+     * Set a default log level to be used with the __invoke() method
+     * @param int $level
+     * @return static
+     */
+    function setDefaultLogLevel(int|string $level): static
+    {
+        if(is_string($level)){
+            $level=array_search(strtolower($level),self::LOG_LEVEL);
+            if(!$level) $level=7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->defaultLogLevel = $level;
+        return $this;
+    }
+
+    /**
+     * Return a string representation of the default log level
+     * @param int $case return either upper or lower case string
+     * @return string log level
+     */
+    function getDefaultLogLevelString(int $case = self::LOWERCASE): string
+    {
+        return $case = self::LOWERCASE ?
+            self::LOG_LEVEL[$this->defaultLogLevel] :
+            strtoupper(self::LOG_LEVEL[$this->defaultLogLevel]);
+    }
+
+    /**
+     * Return an integer representation of the default log level
+     * @return int log level
+     */
+    function getDefaultLogLevelInt(): int
+    {
+        return $this->defaultLogLevel;
+    }
+
+    public function setCurrentLogLevel(int|string $level): static
+    {
+        if(is_string($level)){
+            $level=array_search(strtolower($level),self::LOG_LEVEL);
+            if(!$level) $level=7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->currentLogLevel = $level;
+        return $this;
+    }
+
+    /**
+     * Return a string representation of the current log level
+     * @param int $case flag return either upper or lower case string
+     * @return string log level
+     */
+    public function getCurrentLogLevelString(int $case = self::LOWERCASE): string
+    {
+        return $case = self::LOWERCASE ?
+            self::LOG_LEVEL[$this->currentLogLevel] :
+            strtoupper(self::LOG_LEVEL[$this->currentLogLevel]);
+    }
+
+    /**
+     * Return an integer representation of the current log level
+     * @return int log level
+     */
+    public function getCurrentLogLevelInt(): int
+    {
+        return $this->currentLogLevel;
+    }
 
     /**
      * Create a target which will accept messages for commit.
@@ -142,13 +213,9 @@ abstract class LogTarget
         $message = str_replace(self::FORMAT_TIMESTAMP, (new DateTime())->format(DATE_RFC3339), $message);
     }
 
-    abstract protected function formatMessage(string &$message):void;
-
-    /**
-     * Set a default log level to be used with the __invoke() method
-     * @param LogLevel $level
-     * @return static
-     */
-    abstract function setDefaultLogLevel(LogLevel $level):static;
+    function isWritable(): bool
+    {
+        return $this->isWriteable;
+    }
 
 }
