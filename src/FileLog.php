@@ -3,6 +3,7 @@
 namespace FoamyCastle\Log;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
+use FoamyCastle\Utils\ContextProcessor;
 
 final class FileLog extends LogTarget
 {
@@ -77,6 +78,8 @@ final class FileLog extends LogTarget
      */
     function writeMessage(string $message): bool
     {
+        $this->formatMessage($message);
+        $message = ContextProcessor::Replace($message,$this->getContextOptions());
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
         }
