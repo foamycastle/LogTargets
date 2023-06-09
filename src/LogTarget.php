@@ -2,7 +2,6 @@
 
 namespace FoamyCastle\Log;
 
-use DateTime;
 use Psr\Log\LogLevel;
 
 abstract class LogTarget
@@ -56,6 +55,152 @@ abstract class LogTarget
      * @var array $contextOptions
      */
     protected array $contextOptions = [];
+
+    /**
+     * Write the string to the resource or database
+     * @param string $message
+     * @return bool
+     */
+    abstract function writeMessage(string $message): bool;
+
+    /**
+     * Returns the message format string
+     * @return string
+     */
+    function getMessageFormat(): string
+    {
+        return $this->messageFormat;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function setMessageFormat(string $format): static
+    {
+        $this->messageFormat = $format;
+        return $this;
+    }
+
+    /**
+     * Return a string representation of the default log level
+     * @param int $case return either upper or lower case string
+     * @return string log level
+     */
+    function getDefaultLogLevelString(int $case = self::LOWERCASE): string
+    {
+        return $case = self::LOWERCASE ?
+            self::LOG_LEVEL[$this->defaultLogLevel] :
+            strtoupper(self::LOG_LEVEL[$this->defaultLogLevel]);
+    }
+
+    /**
+     * Return an integer representation of the default log level
+     * @return int log level
+     */
+    function getDefaultLogLevelInt(): int
+    {
+        return $this->defaultLogLevel;
+    }
+
+    /**
+     * Return a string representation of the current log level
+     * @param int $case flag return either upper or lower case string
+     * @return string log level
+     */
+    public function getCurrentLogLevelString(int $case = self::LOWERCASE): string
+    {
+        return $case = self::LOWERCASE ?
+            self::LOG_LEVEL[$this->currentLogLevel] :
+            strtoupper(self::LOG_LEVEL[$this->currentLogLevel]);
+    }
+
+    /**
+     * Return an integer representation of the current log level
+     * @return int log level
+     */
+    public function getCurrentLogLevelInt(): int
+    {
+        return $this->currentLogLevel;
+    }
+
+    /**
+     * Returns the entire array of context options currently set. If no options are set, an empty array
+     * is returned.
+     * @return array
+     */
+    function getContextOptions(): array
+    {
+        return $this->contextOptions;
+    }
+
+    /**
+     * Set a static array of context options to be used in each message commit. key=>value pairs.
+     * @param array<string,string|int|object|array|float|bool> $options
+     * @return static
+     */
+    function setContextOptions(array $options): static
+    {
+        $this->contextOptions = $options;
+        return $this;
+    }
+
+    /**
+     * Set a default log level to be used with the __invoke() method
+     * @param int $level
+     * @return static
+     */
+    function setDefaultLogLevel(int|string $level): static
+    {
+        if (is_string($level)) {
+            $level = array_search(strtolower($level), self::LOG_LEVEL);
+            if (false === $level) $level = 7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->defaultLogLevel = $level;
+        return $this;
+    }
+
+    public function setCurrentLogLevel(int|string $level): static
+    {
+        if (is_string($level)) {
+            $level = array_search(strtolower($level), self::LOG_LEVEL);
+            if (false === $level) $level = 7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->currentLogLevel = $level;
+        return $this;
+    }
+
+    /**
+     * Remove a single or many context option(s) given its(their) key(s)
+     * @param string|array $key
+     * @return bool
+     */
+    function removeContextOptions(array|string $key): bool
+    {
+        $hasRemoveSomething = false;
+        if (is_array($key)) {
+            foreach ($key as $item) {
+                if (key_exists($item, $this->contextOptions)) {
+                    unset($this->contextOptions[$item]);
+                    $hasRemoveSomething = true;
+                }
+            }
+            return $hasRemoveSomething;
+        } else {
+            if (key_exists($key, $this->contextOptions)) {
+                unset($this->contextOptions[$key]);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    function isWritable(): bool
+    {
+        return $this->isWriteable;
+    }
+
     /**
      * Create a target which will accept messages for commit.
      * @param array $options
@@ -88,148 +233,7 @@ abstract class LogTarget
      * @return bool true if successful
      */
     abstract protected function targetClear(): bool;
-    abstract protected function formatMessage(string &$message):void;
 
-    /**
-     * Write the string to the resource or database
-     * @param string $message
-     * @return bool
-     */
-    abstract function writeMessage(string $message): bool;
-
-    /**
-     * Returns the message format string
-     * @return string
-     */
-    function getMessageFormat(): string
-    {
-        return $this->messageFormat;
-    }
-
-    /**
-     * Return a string representation of the default log level
-     * @param int $case return either upper or lower case string
-     * @return string log level
-     */
-    function getDefaultLogLevelString(int $case = self::LOWERCASE): string
-    {
-        return $case = self::LOWERCASE ?
-            self::LOG_LEVEL[$this->defaultLogLevel] :
-            strtoupper(self::LOG_LEVEL[$this->defaultLogLevel]);
-    }
-
-    /**
-     * Return an integer representation of the default log level
-     * @return int log level
-     */
-    function getDefaultLogLevelInt(): int
-    {
-        return $this->defaultLogLevel;
-    }
-    /**
-     * Return a string representation of the current log level
-     * @param int $case flag return either upper or lower case string
-     * @return string log level
-     */
-    public function getCurrentLogLevelString(int $case = self::LOWERCASE): string
-    {
-        return $case = self::LOWERCASE ?
-            self::LOG_LEVEL[$this->currentLogLevel] :
-            strtoupper(self::LOG_LEVEL[$this->currentLogLevel]);
-    }
-
-    /**
-     * Return an integer representation of the current log level
-     * @return int log level
-     */
-    public function getCurrentLogLevelInt(): int
-    {
-        return $this->currentLogLevel;
-    }
-    /**
-     * Returns the entire array of context options currently set. If no options are set, an empty array
-     * is returned.
-     * @return array
-     */
-    function getContextOptions(): array
-    {
-        return $this->contextOptions;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    function setMessageFormat(string $format): static
-    {
-        $this->messageFormat = $format;
-        return $this;
-    }
-
-    /**
-     * Set a default log level to be used with the __invoke() method
-     * @param int $level
-     * @return static
-     */
-    function setDefaultLogLevel(int|string $level): static
-    {
-        if(is_string($level)){
-            $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(false===$level) $level=7;
-        }
-        if ($level > 7 || $level < 0) $level = 7;
-        $this->defaultLogLevel = $level;
-        return $this;
-    }
-
-    public function setCurrentLogLevel(int|string $level): static
-    {
-        if(is_string($level)){
-            $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(false===$level) $level=7;
-        }
-        if ($level > 7 || $level < 0) $level = 7;
-        $this->currentLogLevel = $level;
-        return $this;
-    }
-    /**
-     * Set a static array of context options to be used in each message commit. key=>value pairs.
-     * @param array<string,string|int|object|array|float|bool> $options
-     * @return static
-     */
-    function setContextOptions(array $options): static
-    {
-        $this->contextOptions=$options;
-        return $this;
-    }
-
-    /**
-     * Remove a single or many context option(s) given its(their) key(s)
-     * @param string|array $key
-     * @return bool
-     */
-    function removeContextOptions(array|string $key): bool
-    {
-        $hasRemoveSomething=false;
-        if(is_array($key)){
-            foreach ($key as $item){
-                if(key_exists($item,$this->contextOptions)) {
-                    unset($this->contextOptions[$item]);
-                    $hasRemoveSomething=true;
-                }
-            }
-            return $hasRemoveSomething;
-        }else{
-            if(key_exists($key,$this->contextOptions)) {
-                unset($this->contextOptions[$key]);
-                return true;
-            }
-            return false;
-        }
-    }
-
-    function isWritable(): bool
-    {
-        return $this->isWriteable;
-    }
+    abstract protected function formatMessage(string &$message): void;
 
 }

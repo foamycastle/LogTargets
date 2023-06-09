@@ -136,7 +136,7 @@ final class FileLog extends LogTarget
         $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
         $message = str_replace(LogTarget::FORMAT_MESSAGE, $message, $format);
         $message = str_replace(LogTarget::FORMAT_LEVEL, LogTarget::LOG_LEVEL[$this->currentLogLevel], $message);
-        $message = str_replace(LogTarget::FORMAT_TIMESTAMP, (new DateTime())->format(DATE_RFC3339), $message);
+        $message = str_replace(LogTarget::FORMAT_TIMESTAMP, (new \DateTime())->format(DATE_RFC3339), $message);
     }
 
     /**
