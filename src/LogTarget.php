@@ -2,11 +2,11 @@
 
 namespace FoamyCastle\Log;
 
-use Psr\Log\LoggerInterface;
+use DateTime;
 use Psr\Log\LogLevel;
 use FoamyCastle\Utils\ContextProcessor;
 
-abstract class LogTarget implements LoggerInterface
+abstract class LogTarget
 {
     protected const DEFAULT_MESSAGE_FORMAT = "{log-level}: {log-timestamp} {log-message}";
     protected const FORMAT_MESSAGE='{log-message}';
