@@ -65,37 +65,12 @@ abstract class LogTarget
     abstract function writeMessage(string $message): bool;
 
     /**
-     * @inheritDoc
-     */
-    function setMessageFormat(string $format): static
-    {
-        $this->messageFormat = $format;
-        return $this;
-    }
-
-    /**
      * Returns the message format string
      * @return string
      */
     function getMessageFormat(): string
     {
         return $this->messageFormat;
-    }
-
-    /**
-     * Set a default log level to be used with the __invoke() method
-     * @param int $level
-     * @return static
-     */
-    function setDefaultLogLevel(int|string $level): static
-    {
-        if(is_string($level)){
-            $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(false===$level) $level=7;
-        }
-        if ($level > 7 || $level < 0) $level = 7;
-        $this->defaultLogLevel = $level;
-        return $this;
     }
 
     /**
@@ -118,18 +93,6 @@ abstract class LogTarget
     {
         return $this->defaultLogLevel;
     }
-
-    public function setCurrentLogLevel(int|string $level): static
-    {
-        if(is_string($level)){
-            $level=array_search(strtolower($level),self::LOG_LEVEL);
-            if(false===$level) $level=7;
-        }
-        if ($level > 7 || $level < 0) $level = 7;
-        $this->currentLogLevel = $level;
-        return $this;
-    }
-
     /**
      * Return a string representation of the current log level
      * @param int $case flag return either upper or lower case string
@@ -149,6 +112,61 @@ abstract class LogTarget
     public function getCurrentLogLevelInt(): int
     {
         return $this->currentLogLevel;
+    }
+    /**
+     * Returns the entire array of context options currently set. If no options are set, an empty array
+     * is returned.
+     * @return array
+     */
+    function getContextOptions(): array
+    {
+        return $this->contextOptions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    function setMessageFormat(string $format): static
+    {
+        $this->messageFormat = $format;
+        return $this;
+    }
+
+    /**
+     * Set a default log level to be used with the __invoke() method
+     * @param int $level
+     * @return static
+     */
+    function setDefaultLogLevel(int|string $level): static
+    {
+        if(is_string($level)){
+            $level=array_search(strtolower($level),self::LOG_LEVEL);
+            if(false===$level) $level=7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->defaultLogLevel = $level;
+        return $this;
+    }
+
+    public function setCurrentLogLevel(int|string $level): static
+    {
+        if(is_string($level)){
+            $level=array_search(strtolower($level),self::LOG_LEVEL);
+            if(false===$level) $level=7;
+        }
+        if ($level > 7 || $level < 0) $level = 7;
+        $this->currentLogLevel = $level;
+        return $this;
+    }
+    /**
+     * Set a static array of context options to be used in each message commit. key=>value pairs.
+     * @param array<string,string|int|object|array|float|bool> $options
+     * @return static
+     */
+    function setContextOptions(array $options): static
+    {
+        $this->contextOptions=$options;
+        return $this;
     }
 
     /**
@@ -183,27 +201,6 @@ abstract class LogTarget
      * @return bool true if successful
      */
     abstract protected function targetClear(): bool;
-
-    /**
-     * Set a static array of context options to be used in each message commit. key=>value pairs.
-     * @param array<string,string|int|object|array|float|bool> $options
-     * @return static
-     */
-    function setContextOptions(array $options): static
-    {
-        $this->contextOptions=$options;
-        return $this;
-    }
-
-    /**
-     * Returns the entire array of context options currently set. If no options are set, an empty array
-     * is returned.
-     * @return array
-     */
-    function getContextOptions(): array
-    {
-        return $this->contextOptions;
-    }
 
     /**
      * Remove a single or many context option(s) given its(their) key(s)
