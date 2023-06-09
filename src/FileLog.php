@@ -67,7 +67,7 @@ class FileLog extends LogTarget
     /**
      * @inheritDoc
      */
-    protected function writeMessage(string $message): bool
+    function writeMessage(string $message): bool
     {
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
