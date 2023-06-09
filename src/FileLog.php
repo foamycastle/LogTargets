@@ -2,11 +2,7 @@
 
 namespace FoamyCastle\Log;
 
-use DateTime;
 use FoamyCastle\Log\Exception\PathNotWritable;
-use FoamyCastle\Utils\ContextProcessor;
-use Psr\Log\LogLevel;
-use Stringable;
 
 class FileLog extends LogTarget
 {
