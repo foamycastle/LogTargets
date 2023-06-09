@@ -8,6 +8,61 @@ use FoamyCastle\Utils\ContextProcessor;
 
 abstract class LogTarget implements LoggerInterface
 {
+    protected const DEFAULT_MESSAGE_FORMAT = "{log-level}: {log-timestamp} {log-message}";
+    protected const FORMAT_MESSAGE='{log-message}';
+    protected const FORMAT_TIMESTAMP='{log-timestamp}';
+    protected const FORMAT_LEVEL='{log-level}';
+    protected const LOG_LEVEL=[
+        0=>LogLevel::EMERGENCY,
+        1=>LogLevel::ALERT,
+        2=>LogLevel::CRITICAL,
+        3=>LogLevel::ERROR,
+        4=>LogLevel::WARNING,
+        5=>LogLevel::NOTICE,
+        6=>LogLevel::INFO,
+        7=>LogLevel::DEBUG
+    ];
+    /**
+     * Indicates whether the process is able to and/or has permissions to write log messages.
+     * @var bool true if log messages may br written to the filesystem
+     */
+    protected bool $isWriteable=false;
+    /**
+     * Contains key->value pairs that will be substituted in the log message
+     * @var array
+     */
+    protected array $options;
+
+    /**
+     * An integer representing the log level
+     * @var int
+     */
+    protected int $defaultLogLevel;
+    /**
+     * The log level of the current message;
+     * @var int $currentLogLevel
+     */
+    protected int $currentLogLevel=7;
+
+    /**
+     * A string that contains plain text and symbols that serves as the blueprint for each log message
+     * @var string $messageFormat
+     */
+    protected string $messageFormat;
+
+    /**
+     * A key->value hash that contains pieces of data that will replace {curly brace} elements in the log message
+     * @var array $contextOptions
+     */
+    protected array $contextOptions=[];
+
+    /**
+     * Write the string to the resource or database
+     * @param string $message
+     * @return string
+     */
+    abstract protected function writeMessage(string $message):bool;
+
     /**
      * Create a target which will accept messages for commit. If the target is a database, the $name
      * will be the database name and $path will be the table name.  If the target is a file, the $name
