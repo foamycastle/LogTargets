@@ -200,7 +200,11 @@ abstract class LogTarget
      * is returned.
      * @return array
      */
-    abstract function getContextOptions(): array;
+    function getContextOptions(): array
+    {
+        return $this->contextOptions;
+    }
+
     /**
      * Remove a single or many context option(s) given its(their) key(s)
      * @param string|array $key

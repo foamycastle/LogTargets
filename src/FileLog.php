@@ -152,14 +152,6 @@ final class FileLog extends LogTarget
     /**
      * @inheritDoc
      */
-    function getContextOptions(): array
-    {
-        return $this->contextOptions;
-    }
-
-    /**
-     * @inheritDoc
-     */
     function removeContextOptions(array|string $key): bool
     {
         $hasRemoveSomething=false;
