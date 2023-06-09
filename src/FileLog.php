@@ -64,6 +64,14 @@ final class FileLog extends LogTarget
         }
         return false;
     }
+
+    /**
+     * Returns the full path string of the current target
+     * @return string
+     */
+    public function getTargetPath():string{
+        return $this->logFilePath??"";
+    }
     /**
      * @inheritDoc
      */
