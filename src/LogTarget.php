@@ -68,49 +68,47 @@ abstract class LogTarget implements LoggerInterface
      * @param array $options
      * @return bool
      */
-    abstract protected function targetCreate(string $name,string $path=''):bool;
+    abstract protected function targetCreate(array $options=[]):mixed;
 
     /**
      * Verifies the existences of a target.
      * @return bool
      */
-    abstract protected function targetExists(string $name,string $path=''):bool;
+    abstract protected function targetExists():bool;
 
     /**
      * Prepare a target to receive log messages.
-     * @param string $name
-     * @param string $path
      * @param array $options
      * @return bool
      */
-    abstract protected function targetMakeReady(string $name, string $path='', array $options=[]):bool;
+    abstract protected function targetMakeReady(array $options=[]):bool;
 
     /**
      * Remove the target resource from the system.
      * @return bool
      */
-    abstract protected function targetUnset(string $name,string $path=''):bool;
+    abstract protected function targetUnset():bool;
 
     /**
      * Erase all committed messages on a target without destroying the target
      * @param string $name
      * @return bool true if successful
      */
-    abstract protected function targetClear(string $name):bool;
+    abstract protected function targetClear():bool;
 
     /**
      * Set a static array of context options to be used in each message commit. key=>value pairs.
      * @param array<string,string|int|object|array|float|bool> $options
      * @return static
      */
-    abstract protected function setContextOptions(...$options):static;
+    abstract function setContextOptions(...$options):static;
 
     /**
      * Returns the entire array of context options currently set. If no options are set, an empty array
      * is returned.
      * @return array
      */
-    abstract protected function getContextOptions():array;
+    abstract function getContextOptions():array;
     /**
      * Remove a single or many context option(s) given its(their) key(s)
      * @param string|array $key
@@ -123,7 +121,7 @@ abstract class LogTarget implements LoggerInterface
      * @param string $format
      * @return static
      */
-    abstract protected function setMessageFormat(string $format):static;
+    abstract function setMessageFormat(string $format):static;
 
     /**
      * Returns the currently used log message format
@@ -144,6 +142,6 @@ abstract class LogTarget implements LoggerInterface
      * @param LogLevel $level
      * @return static
      */
-    abstract protected function setLogLevel(LogLevel $level):static;
+    abstract function setDefaultLogLevel(LogLevel $level):static;
 
 }
