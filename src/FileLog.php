@@ -149,29 +149,6 @@ final class FileLog extends LogTarget
         return false;
     }
 
-    /**
-     * @inheritDoc
-     */
-    function removeContextOptions(array|string $key): bool
-    {
-        $hasRemoveSomething=false;
-        if(is_array($key)){
-            foreach ($key as $item){
-                if(key_exists($item,$this->contextOptions)) {
-                    unset($this->contextOptions[$item]);
-                    $hasRemoveSomething=true;
-                }
-            }
-            return $hasRemoveSomething;
-        }else{
-            if(key_exists($key,$this->contextOptions)) {
-                unset($this->contextOptions[$key]);
-                return true;
-            }
-            return false;
-        }
-    }
-
     public function isWritable(): bool
     {
         return $this->isWriteable;

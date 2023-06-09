@@ -210,7 +210,25 @@ abstract class LogTarget
      * @param string|array $key
      * @return bool
      */
-    abstract function removeContextOptions(string|array $key): bool;
+    function removeContextOptions(array|string $key): bool
+    {
+        $hasRemoveSomething=false;
+        if(is_array($key)){
+            foreach ($key as $item){
+                if(key_exists($item,$this->contextOptions)) {
+                    unset($this->contextOptions[$item]);
+                    $hasRemoveSomething=true;
+                }
+            }
+            return $hasRemoveSomething;
+        }else{
+            if(key_exists($key,$this->contextOptions)) {
+                unset($this->contextOptions[$key]);
+                return true;
+            }
+            return false;
+        }
+    }
 
     /**
      * Replaces all formatting symbols with data
