@@ -3,7 +3,6 @@
 namespace FoamyCastle\Log;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
-use FoamyCastle\Utils\ContextProcessor;
 use FoamyCastle\Utils\MessageFormatter\MessageFormatter;
 
 final class FileLog extends LogTarget
@@ -143,7 +142,8 @@ final class FileLog extends LogTarget
                 $date=new \DateTime('now');
                 return $date->format(DATE_RFC2822);
             },
-            (LogTarget::FORMAT_HOSTNAME)    =>$_SERVER['SERVER_NAME']
+            (LogTarget::FORMAT_HOSTNAME)    =>$_SERVER['SERVER_NAME'],
+            (LogTarget::FORMAT_PORT)        =>$_SERVER['SERVER_PORT']
         ];
         $message=new MessageFormatter($message,$symbols);
     }

@@ -6,7 +6,7 @@ use Psr\Log\LogLevel;
 
 abstract class LogTarget
 {
-    protected const DEFAULT_MESSAGE_FORMAT = "{log-level}: {log-timestamp} {log-message}";
+    protected const DEFAULT_MESSAGE_FORMAT = "{log-level}: {log-hostname}:{log-port} {log-timestamp} {log-message}";
     protected const FORMAT_MESSAGE = '{log-message}';
     protected const FORMAT_TIMESTAMP = '{log-timestamp}';
     protected const FORMAT_LEVEL = '{log-level}';
