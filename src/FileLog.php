@@ -79,7 +79,7 @@ final class FileLog extends LogTarget
     function writeMessage(string $message): bool
     {
         $formatter = new MessageFormatter($message,$this->getContextOptions());
-        $message = $this->prepareLogMessage($formatter->getMessage()).PHP_EOL;
+        $message = $this->prepareLogTemplate($formatter->getMessage()).PHP_EOL;
         unset($formatter);
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
@@ -131,18 +131,18 @@ final class FileLog extends LogTarget
      * @param string $message string to be formatted. passed by reference
      * @return void
      */
-    function prepareLogMessage(string $message): string
+    function prepareLogTemplate(string $message): string
     {
         $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
         $symbols=[
-            LogTarget::FORMAT_MESSAGE     =>$message,
-            LogTarget::FORMAT_LEVEL       => $this->getCurrentLogLevelString(),
-            LogTarget::FORMAT_TIMESTAMP   => function(){
+            (LogTarget::FORMAT_MESSAGE)     => $message,
+            (LogTarget::FORMAT_LEVEL)       => $this->getCurrentLogLevelString(),
+            (LogTarget::FORMAT_TIMESTAMP)   => function(){
                 $date=new \DateTime('now');
                 return $date->format(DATE_RFC2822);
             },
-            LogTarget::FORMAT_HOSTNAME    =>$_SERVER['SERVER_NAME'],
-            LogTarget::FORMAT_PORT        =>$_SERVER['SERVER_PORT']
+            (LogTarget::FORMAT_HOSTNAME)    =>$_SERVER['SERVER_NAME'],
+            (LogTarget::FORMAT_PORT)        =>$_SERVER['SERVER_PORT']
         ];
         return (new MessageFormatter($format,$symbols))->getMessage();
     }
