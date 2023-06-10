@@ -13,7 +13,7 @@
   "require": {
     "php": ">=8.0",
     "psr/log": "3.0.0",
-    "foamycastle/messageformatter": "1.03"
+    "foamycastle/messageformatter": "dev-main"
   },
   "require-dev": {
     "phpunit/phpunit": "10.2.1"
