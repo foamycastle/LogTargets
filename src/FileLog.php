@@ -4,6 +4,7 @@ namespace FoamyCastle\Log;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
 use FoamyCastle\Utils\ContextProcessor;
+use FoamyCastle\Utils\MessageFormatter\MessageFormatter;
 
 final class FileLog extends LogTarget
 {
@@ -79,8 +80,9 @@ final class FileLog extends LogTarget
     function writeMessage(string $message): bool
     {
         $this->formatMessage($message);
-        $message = ContextProcessor::Replace($message,$this->getContextOptions());
-        $message .= str_ends_with($message,PHP_EOL) ?: PHP_EOL;
+        $formatter = new MessageFormatter($message,$this->getContextOptions());
+        $message = $formatter.PHP_EOL;
+        unset($formatter);
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
         }
@@ -134,9 +136,16 @@ final class FileLog extends LogTarget
     function formatMessage(string &$message): void
     {
         $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
-        $message = str_replace(LogTarget::FORMAT_MESSAGE, $message, $format);
-        $message = str_replace(LogTarget::FORMAT_LEVEL, LogTarget::LOG_LEVEL[$this->currentLogLevel], $message);
-        $message = str_replace(LogTarget::FORMAT_TIMESTAMP, (new \DateTime())->format(DATE_RFC3339), $message);
+        $symbols=[
+            (LogTarget::FORMAT_MESSAGE)     =>$message,
+            (LogTarget::FORMAT_LEVEL)       => $this->getCurrentLogLevelString(),
+            (LogTarget::FORMAT_TIMESTAMP)   => function(){
+                $date=new \DateTime('now');
+                return $date->format(DATE_RFC2822);
+            },
+            (LogTarget::FORMAT_HOSTNAME)    =>$_SERVER['SERVER_NAME']
+        ];
+        $message=new MessageFormatter($message,$symbols);
     }
 
     /**
