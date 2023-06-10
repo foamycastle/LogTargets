@@ -78,9 +78,8 @@ final class FileLog extends LogTarget
      */
     function writeMessage(string $message): bool
     {
-        $this->formatMessage($message);
         $formatter = new MessageFormatter($message,$this->getContextOptions());
-        $message = $formatter.PHP_EOL;
+        $message = $this->prepareLogMessage($formatter->getMessage()).PHP_EOL;
         unset($formatter);
         if($this->isWriteable){
             return (false!==fwrite($this->fileResource,$message,strlen($message)));
@@ -132,7 +131,7 @@ final class FileLog extends LogTarget
      * @param string $message string to be formatted. passed by reference
      * @return void
      */
-    function formatMessage(string &$message): void
+    function prepareLogMessage(string $message): string
     {
         $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
         $symbols=[
@@ -145,7 +144,7 @@ final class FileLog extends LogTarget
             LogTarget::FORMAT_HOSTNAME    =>$_SERVER['SERVER_NAME'],
             LogTarget::FORMAT_PORT        =>$_SERVER['SERVER_PORT']
         ];
-        $message=new MessageFormatter($format,$symbols);
+        return (new MessageFormatter($format,$symbols))->getMessage();
     }
 
     /**

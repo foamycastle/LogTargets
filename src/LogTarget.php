@@ -236,6 +236,6 @@ abstract class LogTarget
      */
     abstract protected function targetClear(): bool;
 
-    abstract protected function formatMessage(string &$message): void;
+    abstract protected function prepareLogMessage(string $message): string;
 
 }
