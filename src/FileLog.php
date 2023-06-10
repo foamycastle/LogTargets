@@ -136,16 +136,16 @@ final class FileLog extends LogTarget
     {
         $format = $this->messageFormat == "" ? LogTarget::DEFAULT_MESSAGE_FORMAT : $this->messageFormat;
         $symbols=[
-            (LogTarget::FORMAT_MESSAGE)     =>$message,
-            (LogTarget::FORMAT_LEVEL)       => $this->getCurrentLogLevelString(),
-            (LogTarget::FORMAT_TIMESTAMP)   => function(){
+            LogTarget::FORMAT_MESSAGE     =>$message,
+            LogTarget::FORMAT_LEVEL       => $this->getCurrentLogLevelString(),
+            LogTarget::FORMAT_TIMESTAMP   => function(){
                 $date=new \DateTime('now');
                 return $date->format(DATE_RFC2822);
             },
-            (LogTarget::FORMAT_HOSTNAME)    =>$_SERVER['SERVER_NAME'],
-            (LogTarget::FORMAT_PORT)        =>$_SERVER['SERVER_PORT']
+            LogTarget::FORMAT_HOSTNAME    =>$_SERVER['SERVER_NAME'],
+            LogTarget::FORMAT_PORT        =>$_SERVER['SERVER_PORT']
         ];
-        $message=new MessageFormatter($message,$symbols);
+        $message=new MessageFormatter($format,$symbols);
     }
 
     /**
