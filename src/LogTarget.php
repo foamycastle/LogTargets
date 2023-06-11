@@ -211,6 +211,11 @@ abstract class LogTarget
         return $this;
     }
 
+    /**
+     * Set the log level for the pending message write
+     * @param int|string $level can either be the integer level or the string representation of the integer value
+     * @return $this
+     */
     public function setCurrentLogLevel(int|string $level): static
     {
         if (is_string($level)) {
