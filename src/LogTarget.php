@@ -47,12 +47,6 @@ abstract class LogTarget
     protected string $messageTemplate;
 
     /**
-     * A key->value hash that contains pieces of data that will replace {curly brace} elements in the log message
-     * @var array $contextOptions
-     */
-    protected array $contextOptions = [];
-
-    /**
      * MessageFormatter object handles the search-and-replace operations of replacing symbols in the log
      * message with their corresponding values
      * @var MessageFormatter $logEntryFormatter
@@ -169,27 +163,6 @@ abstract class LogTarget
     }
 
     /**
-     * Returns the entire array of context options currently set. If no options are set, an empty array
-     * is returned.
-     * @return array
-     */
-    function getContextOptions(): array
-    {
-        return $this->contextOptions;
-    }
-
-    /**
-     * Set a static array of context options to be used in each message commit. key=>value pairs.
-     * @param array<string,string|int|object|array|float|bool> $options
-     * @return static
-     */
-    function setContextOptions(array $options): static
-    {
-        $this->contextOptions = $options;
-        return $this;
-    }
-
-    /**
      * Set a default log level to be used with the __invoke() method
      * @param int $level
      * @return static
@@ -219,31 +192,6 @@ abstract class LogTarget
         if ($level > 7 || $level < 0) $level = 7;
         $this->currentLogLevel = $level;
         return $this;
-    }
-
-    /**
-     * Remove a single or many context option(s) given its(their) key(s)
-     * @param string|array $key
-     * @return bool
-     */
-    function removeContextOptions(array|string $key): bool
-    {
-        $hasRemoveSomething = false;
-        if (is_array($key)) {
-            foreach ($key as $item) {
-                if (key_exists($item, $this->contextOptions)) {
-                    unset($this->contextOptions[$item]);
-                    $hasRemoveSomething = true;
-                }
-            }
-            return $hasRemoveSomething;
-        } else {
-            if (key_exists($key, $this->contextOptions)) {
-                unset($this->contextOptions[$key]);
-                return true;
-            }
-            return false;
-        }
     }
 
     /**
