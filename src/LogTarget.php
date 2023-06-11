@@ -19,32 +19,32 @@ abstract class LogTarget
      * @param array $options
      * @return bool
      */
-    abstract protected function targetCreate(array $options = []): mixed;
+    abstract protected function targetCreate(string|array $options): mixed;
 
     /**
      * Verifies the existences of a target.
      * @return bool
      */
-    abstract protected function targetExists(array $options = []): bool;
+    abstract protected function targetExists(string|array $options): bool;
 
     /**
      * Prepare a target to receive log messages.
      * @param array $options
      * @return bool
      */
-    abstract protected function targetMakeReady(array $options = []): bool;
+    abstract protected function targetMakeReady(string|array $options): bool;
 
     /**
      * Remove the target resource from the system.
      * @return bool
      */
-    abstract protected function targetUnset(array $options = []): bool;
+    abstract protected function targetUnset(string|array $options): bool;
 
     /**
      * Erase all committed messages on a target without destroying the target
      * @return bool true if successful
      */
-    abstract protected function targetClear(array $options = []): bool;
+    abstract protected function targetClear(string|array $options): bool;
 
     /**
      * Write the string to the resource or database
