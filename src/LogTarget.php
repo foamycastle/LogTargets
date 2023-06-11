@@ -203,6 +203,4 @@ abstract class LogTarget
         return $this->isWriteable;
     }
 
-
-
 }
