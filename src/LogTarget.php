@@ -59,13 +59,6 @@ abstract class LogTarget
     protected MessageFormatter $logEntryFormatter;
 
     /**
-     * Write the string to the resource or database
-     * @param string $message
-     * @return bool
-     */
-    abstract function writeMessage(string $message): bool;
-
-    /**
      * Create a target which will accept messages for commit.
      * @param array $options
      * @return bool
@@ -103,6 +96,12 @@ abstract class LogTarget
      * @return string a ready-to-write log entry
      */
     abstract protected function prepareLogTemplate(string $message): string;
+    /**
+     * Write the string to the resource or database
+     * @param string $message
+     * @return bool
+     */
+    abstract function writeMessage(string $message): bool;
 
     /**
      * Returns the message format string
