@@ -21,11 +21,13 @@ abstract class LogTarget
     ];
     public const UPPERCASE = 1;
     public const LOWERCASE = 2;
+
     /**
      * Indicates whether the process is able to and/or has permissions to write log messages.
      * @var bool true if log messages may br written to the filesystem
      */
     protected bool $isWriteable = false;
+
     /**
      * Contains key->value pairs that will be substituted in the log message
      * @var array
