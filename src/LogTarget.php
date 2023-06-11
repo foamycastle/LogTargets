@@ -48,9 +48,9 @@ abstract class LogTarget
 
     /**
      * A string that contains plain text and symbols that serves as the blueprint for each log message
-     * @var string $messageFormat
+     * @var string $messageTemplate
      */
-    protected string $messageFormat;
+    protected string $messageTemplate;
 
     /**
      * A key->value hash that contains pieces of data that will replace {curly brace} elements in the log message
@@ -118,7 +118,7 @@ abstract class LogTarget
      */
     function getMessageTemplate(): string
     {
-        return $this->messageFormat;
+        return $this->messageTemplate;
     }
 
     /**
@@ -128,7 +128,7 @@ abstract class LogTarget
      */
     function setMessageTemplate(string $format): static
     {
-        $this->messageFormat = $format;
+        $this->messageTemplate = $format;
         return $this;
     }
 
