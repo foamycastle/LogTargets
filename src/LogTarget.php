@@ -6,6 +6,9 @@ use Psr\Log\LogLevel;
 
 abstract class LogTarget
 {
+    /**
+     * RFC4122 Log levels
+     */
     protected const LOG_LEVEL = [
         0 => LogLevel::EMERGENCY,
         1 => LogLevel::ALERT,
