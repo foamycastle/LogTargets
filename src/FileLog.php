@@ -24,16 +24,24 @@ class FileLog extends LogTarget
 
     public function __construct(string $path, bool $autoEOL=true)
     {
+        //assign properties
         $this->autoEOL=$autoEOL;
         $this->filePath = $path;
+
+        //test if a resource exists
         if (!$this->targetExists($this->filePath)) {
+            //if not, create it
             $this->resource = $this->targetCreate($this->filePath);
         } else {
+            //if so, open it
             $this->resource = $this->targetOpen(($this->filePath));
         }
+        //test if the create/open operation failed
         if(!$this->resource){
             throw new PathNotWritable($path);
         }
+
+        //set the class in a ready-to-write state
         $this->targetMakeReady();
     }
 
@@ -53,6 +61,7 @@ class FileLog extends LogTarget
     }
 
     /**
+     * @param array|string $options The full path to the file on the system
      * @inheritDoc
      */
     protected function targetCreate(array|string $options = []): mixed
@@ -62,7 +71,7 @@ class FileLog extends LogTarget
 
     /**
      * Open an existing target for continued use
-     * @param string|array $options
+     * @param string|array $options The full path to the file on the system
      * @return mixed
      */
     protected function targetOpen(array|string $options = []): mixed
@@ -81,7 +90,7 @@ class FileLog extends LogTarget
     }
 
     /**
-     * @param array $options
+     * @param array|string $options The full path to the file on the system
      * @inheritDoc
      */
     protected function targetExists(array|string $options = []): bool
