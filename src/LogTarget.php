@@ -1,7 +1,7 @@
 <?php
 
 namespace FoamyCastle\Log;
-
+use FoamyCastle\Utils\MessageFormatter\MessageFormatter;
 use Psr\Log\LogLevel;
 
 abstract class LogTarget
@@ -57,6 +57,13 @@ abstract class LogTarget
      * @var array $contextOptions
      */
     protected array $contextOptions = [];
+
+    /**
+     * MessageFormatter object handles the search-and-replace operations of replacing symbols in the log
+     * message with their corresponding values
+     * @var MessageFormatter $logMessage
+     */
+    protected MessageFormatter $logMessage;
 
     /**
      * Write the string to the resource or database
