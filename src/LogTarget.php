@@ -61,9 +61,9 @@ abstract class LogTarget
     /**
      * MessageFormatter object handles the search-and-replace operations of replacing symbols in the log
      * message with their corresponding values
-     * @var MessageFormatter $logMessage
+     * @var MessageFormatter $logEntryFormatter
      */
-    protected MessageFormatter $logMessage;
+    protected MessageFormatter $logEntryFormatter;
 
     /**
      * Write the string to the resource or database
