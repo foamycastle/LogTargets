@@ -252,6 +252,10 @@ abstract class LogTarget
         }
     }
 
+    /**
+     * Indicates that the log target is able to accept write operations
+     * @return bool TRUE if the target is write-ready
+     */
     function isWritable(): bool
     {
         return $this->isWriteable;
