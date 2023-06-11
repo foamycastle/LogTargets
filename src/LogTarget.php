@@ -73,6 +73,46 @@ abstract class LogTarget
     abstract function writeMessage(string $message): bool;
 
     /**
+     * Create a target which will accept messages for commit.
+     * @param array $options
+     * @return bool
+     */
+    abstract protected function targetCreate(array $options = []): mixed;
+
+    /**
+     * Verifies the existences of a target.
+     * @return bool
+     */
+    abstract protected function targetExists(): bool;
+
+    /**
+     * Prepare a target to receive log messages.
+     * @param array $options
+     * @return bool
+     */
+    abstract protected function targetMakeReady(array $options = []): bool;
+
+    /**
+     * Remove the target resource from the system.
+     * @return bool
+     */
+    abstract protected function targetUnset(): bool;
+
+    /**
+     * Erase all committed messages on a target without destroying the target
+     * @param string $name
+     * @return bool true if successful
+     */
+    abstract protected function targetClear(): bool;
+
+    /**
+     * Return the entirely-formatted log message with all log template symbols replaced
+     * @param string $message The already-processed user message portion.
+     * @return string a ready-to-write log entry
+     */
+    abstract protected function prepareLogTemplate(string $message): string;
+
+    /**
      * Returns the message format string
      * @return string
      */
@@ -210,39 +250,6 @@ abstract class LogTarget
         return $this->isWriteable;
     }
 
-    /**
-     * Create a target which will accept messages for commit.
-     * @param array $options
-     * @return bool
-     */
-    abstract protected function targetCreate(array $options = []): mixed;
 
-    /**
-     * Verifies the existences of a target.
-     * @return bool
-     */
-    abstract protected function targetExists(): bool;
-
-    /**
-     * Prepare a target to receive log messages.
-     * @param array $options
-     * @return bool
-     */
-    abstract protected function targetMakeReady(array $options = []): bool;
-
-    /**
-     * Remove the target resource from the system.
-     * @return bool
-     */
-    abstract protected function targetUnset(): bool;
-
-    /**
-     * Erase all committed messages on a target without destroying the target
-     * @param string $name
-     * @return bool true if successful
-     */
-    abstract protected function targetClear(): bool;
-
-    abstract protected function prepareLogTemplate(string $message): string;
 
 }
