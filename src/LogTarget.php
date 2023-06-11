@@ -116,7 +116,7 @@ abstract class LogTarget
      * Returns the message format string
      * @return string
      */
-    function getMessageFormat(): string
+    function getMessageTemplate(): string
     {
         return $this->messageFormat;
     }
@@ -124,7 +124,7 @@ abstract class LogTarget
     /**
      * @inheritDoc
      */
-    function setMessageFormat(string $format): static
+    function setMessageTemplate(string $format): static
     {
         $this->messageFormat = $format;
         return $this;
