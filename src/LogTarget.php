@@ -163,7 +163,7 @@ abstract class LogTarget
 
     /**
      * Set a default log level to be used with the __invoke() method
-     * @param int $level
+     * @param int|string $level
      * @return static
      */
     function setDefaultLogLevel(int|string $level): static
