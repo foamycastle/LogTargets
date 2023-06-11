@@ -122,7 +122,9 @@ abstract class LogTarget
     }
 
     /**
-     * @inheritDoc
+     * Set the message template from which each log message will be built
+     * @param string $format
+     * @return $this
      */
     function setMessageTemplate(string $format): static
     {
