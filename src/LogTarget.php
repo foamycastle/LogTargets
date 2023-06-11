@@ -1,6 +1,7 @@
 <?php
 
 namespace FoamyCastle\Log;
+
 use FoamyCastle\Utils\MessageFormatter\MessageFormatter;
 use Psr\Log\LogLevel;
 
@@ -96,6 +97,7 @@ abstract class LogTarget
      * @return string a ready-to-write log entry
      */
     abstract protected function prepareLogTemplate(string $message): string;
+
     /**
      * Write the string to the resource or database
      * @param string $message
