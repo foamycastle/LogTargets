@@ -70,7 +70,7 @@ abstract class LogTarget
      * Verifies the existences of a target.
      * @return bool
      */
-    abstract protected function targetExists(): bool;
+    abstract protected function targetExists(array $options = []): bool;
 
     /**
      * Prepare a target to receive log messages.
@@ -83,13 +83,13 @@ abstract class LogTarget
      * Remove the target resource from the system.
      * @return bool
      */
-    abstract protected function targetUnset(): bool;
+    abstract protected function targetUnset(array $options = []): bool;
 
     /**
      * Erase all committed messages on a target without destroying the target
      * @return bool true if successful
      */
-    abstract protected function targetClear(): bool;
+    abstract protected function targetClear(array $options = []): bool;
 
     /**
      * Return the entirely-formatted log message with all log template symbols replaced
