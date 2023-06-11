@@ -47,19 +47,6 @@ abstract class LogTarget
     protected int $currentLogLevel = 7;
 
     /**
-     * A string that contains plain text and symbols that serves as the blueprint for each log message
-     * @var string $messageTemplate
-     */
-    protected string $messageTemplate;
-
-    /**
-     * MessageFormatter object handles the search-and-replace operations of replacing symbols in the log
-     * message with their corresponding values
-     * @var MessageFormatter $logEntryFormatter
-     */
-    protected MessageFormatter $logEntryFormatter;
-
-    /**
      * Create a target which will accept messages for commit.
      * @param array $options
      * @return bool
@@ -90,13 +77,6 @@ abstract class LogTarget
      * @return bool true if successful
      */
     abstract protected function targetClear(array $options = []): bool;
-
-    /**
-     * Return the entirely-formatted log message with all log template symbols replaced
-     * @param string $message The already-processed user message portion.
-     * @return string a ready-to-write log entry
-     */
-    abstract protected function prepareLogTemplate(string $message): string;
 
     /**
      * Write the string to the resource or database
