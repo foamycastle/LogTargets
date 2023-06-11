@@ -22,6 +22,20 @@ abstract class LogTarget
     abstract protected function targetCreate(string|array $options): mixed;
 
     /**
+     * Open an existing target for continued use
+     * @param string|array $options
+     * @return mixed
+     */
+    abstract protected function targetOpen(string|array $options): mixed;
+
+    /**
+     * Close an open target
+     * @param string|array $options
+     * @return bool
+     */
+    abstract protected function targetClose(string|array $options): bool;
+
+    /**
      * Verifies the existences of a target.
      * @return bool
      */
