@@ -88,7 +88,6 @@ abstract class LogTarget
 
     /**
      * Erase all committed messages on a target without destroying the target
-     * @param string $name
      * @return bool true if successful
      */
     abstract protected function targetClear(): bool;
