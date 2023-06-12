@@ -144,6 +144,6 @@ class FileLog extends LogTarget
     {
         if(!$this->isWriteable) return false;
         $message .= $this->autoEOL ? PHP_EOL : "";
-        return (@fwrite($this->resource,$message,strlen($message)!==false));
+        return (@fwrite($this->resource,$message,strlen($message))!==false);
     }
 }
