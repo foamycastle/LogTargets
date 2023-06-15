@@ -63,7 +63,7 @@ class SocketLog extends LogTarget
      */
     protected function targetOpen(array|string $options): mixed
     {
-
+        return null;
     }
 
     /**
@@ -71,7 +71,7 @@ class SocketLog extends LogTarget
      */
     protected function targetClose(array|string $options): bool
     {
-        // TODO: Implement targetClose() method.
+        return stream_socket_shutdown($this->stream,STREAM_SHUT_RDWR);
     }
 
     /**
@@ -96,7 +96,7 @@ class SocketLog extends LogTarget
      */
     protected function targetUnset(array|string $options): bool
     {
-        // TODO: Implement targetUnset() method.
+        return true;
     }
 
     /**
@@ -104,7 +104,7 @@ class SocketLog extends LogTarget
      */
     protected function targetClear(array|string $options): bool
     {
-        // TODO: Implement targetClear() method.
+        return true;
     }
 
     /**
