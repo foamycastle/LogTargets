@@ -43,7 +43,7 @@ class TCPSocket extends LogTarget
     protected function targetCreate(array|string $options): mixed
     {
         $newResource=stream_socket_client(
-            "udp://".$this->address.":".$this->port,
+            "tcp://".$this->address.":".$this->port,
             $errno,
             $error,
             $this->connectionTimeout,
