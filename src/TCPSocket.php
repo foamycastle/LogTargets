@@ -4,7 +4,7 @@ namespace FoamyCastle\Log;
 
 use FoamyCastle\Log\LogTarget;
 
-class SocketLog extends LogTarget
+class TCPSocket extends LogTarget
 {
     /**
      * @var string $address Address used for socket connection
