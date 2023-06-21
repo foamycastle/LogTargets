@@ -1,6 +1,6 @@
 <?php
 
-namespace FoamyCastle\Log;
+namespace FoamyCastle\Log\File;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
 use FoamyCastle\Log\Exception\TargetFileClearOpFailed;
