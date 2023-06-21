@@ -22,6 +22,7 @@ class SocketTCP extends SocketTarget
         ]
         );
         $this->socket=$this->targetCreate([]);
+        if($this->socket) $this->isWriteable=true;
     }
 
     protected function targetCreate(array|string $options): mixed
