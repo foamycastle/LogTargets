@@ -5,7 +5,7 @@ namespace FoamyCastle\Log;
 use FoamyCastle\Log\Exception\PathNotWritable;
 use FoamyCastle\Log\Exception\TargetFileClearOpFailed;
 
-class FileLog extends LogTarget
+class FileTarget extends LogTarget
 {
     /**
      * @var resource $resource A php file pointer resource
