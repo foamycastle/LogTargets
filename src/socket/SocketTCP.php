@@ -13,7 +13,10 @@ class SocketTCP extends SocketTarget
         $thisHost=gethostbyname(gethostname());
         $this->context=stream_context_create(
         [
-            'tcp'=>[]
+            'tcp'=>[
+                'bind'=>$thisHost
+            ],
+
         ],
         [
             'notification'=>[
@@ -27,7 +30,7 @@ class SocketTCP extends SocketTarget
 
     protected function targetCreate(array|string $options): mixed
     {
-        return stream_socket_client(
+        $stream = stream_socket_client(
             "tcp://".$this->address.":".$this->port,
             $errno,
             $error,
@@ -35,6 +38,10 @@ class SocketTCP extends SocketTarget
             STREAM_CLIENT_CONNECT,
             $this->context
         );
+
+        if(empty($error)) return $stream;
+        echo $error;
+        return null;
     }
 
     protected function targetOpen(array|string $options): mixed
