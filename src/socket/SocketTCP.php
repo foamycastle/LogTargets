@@ -14,7 +14,8 @@ class SocketTCP extends SocketTarget
         $this->context=stream_context_create(
         [
             'tcp'=>[
-                'bindTo'=>$thisHost
+                'bindto'=>$thisHost.":0",
+                'tcp_nodelay'=>true
             ],
 
         ],
