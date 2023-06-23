@@ -3,6 +3,7 @@
 namespace FoamyCastle\Log\MySQL;
 
 use FoamyCastle\Log\File\FileTarget;
+use FoamyCastle\Log\GenericLogMessage;
 use PDO;
 use PDOException;
 
@@ -31,7 +32,11 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
                 self::DATABASE_PASSWORD
             );
         }catch (PDOException $exception){
-
+            $fileTarget=new FileTarget(__DIR__.DIRECTORY_SEPARATOR.'mysql_error_log.log',true);
+            $message=new GenericLogMessage($fileTarget);
+            $message->error("{code} {message}",['code'=>$exception->getCode(),'message'=>$exception->getMessage()]);
+            echo $message;
+            exit(0);
         }
     }
     private function prepareDNSString():string{
