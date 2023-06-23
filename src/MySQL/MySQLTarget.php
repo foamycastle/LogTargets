@@ -22,10 +22,12 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
 
 
     private string $schema;
+    private string $dbType;
     private PDO $pdo;
     public function __construct(string $schema)
     {
         $this->schema=$schema;
+        $this->dbType='mysql';
         $this->pdo=$this->pdoConnect();
     }
     private function pdoConnect():PDO|false
