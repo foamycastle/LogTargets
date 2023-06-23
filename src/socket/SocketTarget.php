@@ -28,15 +28,4 @@ abstract class SocketTarget extends LogTarget
         if(!$this->socket) return false;
         return fputs($this->socket,$message);
     }
-    function socketNotify(
-        int $notification_code,
-        int $severity,
-        string $message,
-        int $message_code,
-        int $bytes_transferred,
-        int $bytes_max
-    ):void
-    {
-        echo "socket notification: \ncode: $notification_code\nseverity: $severity\nmessage: $message\nmessage code: $message_code\nbytes transferred: $bytes_transferred\nbytes max: $bytes_max\n";
-    }
 }
