@@ -22,7 +22,7 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
         $this->schema=$schema;
         $this->pdo=$this->pdoConnect();
     }
-    private function pdoConnect():PDO
+    private function pdoConnect():PDO|false
     {
         try {
             return new PDO(
