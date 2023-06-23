@@ -14,19 +14,13 @@ class SocketTCP extends SocketTarget
         $this->context=stream_context_create(
         [
             'tcp'=>[
-                'bindto'=>$thisHost.":0",
-                'tcp_nodelay'=>true
+                'bindto'=>$thisHost.":0"
             ],
 
-        ],
-        [
-            'notification'=>[
-                $this,'socketNotify'
-            ]
         ]
         );
         $this->socket=$this->targetCreate([]);
-        if($this->socket) $this->isWriteable=true;
+        if($this->socket) $this->isWriteable=$this->targetMakeReady([]);
     }
 
     protected function targetCreate(array|string $options): mixed
@@ -47,22 +41,23 @@ class SocketTCP extends SocketTarget
 
     protected function targetOpen(array|string $options): mixed
     {
-        // TODO: Implement targetOpen() method.
+        return null;
     }
 
     protected function targetClose(array|string $options): bool
     {
-        // TODO: Implement targetClose() method.
+        return stream_socket_shutdown($this->socket,STREAM_SHUT_RDWR);
     }
 
     protected function targetExists(array|string $options): bool
     {
-        // TODO: Implement targetExists() method.
+        return (false!==@stream_socket_get_name($this->socket,true));
     }
 
     protected function targetMakeReady(array|string $options): bool
     {
-        // TODO: Implement targetMakeReady() method.
+        if($this->targetExists([])) return true;
+        return false;
     }
 
     protected function targetUnset(array|string $options): bool
