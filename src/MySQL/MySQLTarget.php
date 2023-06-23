@@ -14,12 +14,11 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
     private const DATABASE_PASSWORD="j\$yPs6c4kMKstngn";
     private const DATABASE_HOST='localhost';
     private const DATABASE_PORT=3306;
-    private string $database;
+
     private string $schema;
     private PDO $pdo;
     public function __construct(string $schema)
     {
-        $this->database=self::DATABASE_NAME;
         $this->schema=$schema;
         $this->pdo=$this->pdoConnect();
     }
