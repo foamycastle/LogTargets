@@ -34,7 +34,7 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
     {
         try {
             return new PDO(
-                $this->prepareDNSString(),
+                $this->prepareDSNString(self::DSN_PREPARE_HOST | self::DSN_PREPARE_PORT),
                 self::DATABASE_USERNAME,
                 self::DATABASE_PASSWORD
             );
@@ -46,12 +46,15 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
             exit(0);
         }
     }
-    private function prepareDNSString():string{
-        $dns='mysql';
+    private function prepareDSNString(int $options=self::DSN_PREPARE_ALL):string{
+        $dsn=$this->dbType;
         $host=self::DATABASE_HOST;
         $port=self::DATABASE_PORT;
         $dbname=self::DATABASE_NAME;
-        return "$dns:host=$host;port=$port;dbname=$dbname";
+        $outputString=$dsn.":host=$host";
+        $outputString.=(($options & self::DSN_PREPARE_PORT) ? ";port=$port":"");
+        $outputString.=(($options & self::DSN_PREPARE_DB_NAME) ? ";dbname=$dbname":"");
+        return $outputString;
     }
     /**
      * @inheritDoc
