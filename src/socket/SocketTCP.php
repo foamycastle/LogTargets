@@ -10,6 +10,8 @@ class SocketTCP extends SocketTarget
     {
         $this->address=$address;
         $this->port=$port;
+        $this->addMsgLen=true;
+        $this->addNewLine=true;
         $thisHost=gethostbyname(gethostname());
         $this->context=stream_context_create(
         [
@@ -62,11 +64,11 @@ class SocketTCP extends SocketTarget
 
     protected function targetUnset(array|string $options): bool
     {
-        // TODO: Implement targetUnset() method.
+        return true;
     }
 
     protected function targetClear(array|string $options): bool
     {
-        // TODO: Implement targetClear() method.
+        return true;
     }
 }
