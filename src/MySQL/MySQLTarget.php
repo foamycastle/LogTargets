@@ -15,6 +15,12 @@ class MySQLTarget extends \FoamyCastle\Log\LogTarget
     private const DATABASE_HOST='localhost';
     private const DATABASE_PORT=3306;
 
+    private const DSN_PREPARE_HOST=1;
+    private const DSN_PREPARE_DB_NAME=2;
+    private const DSN_PREPARE_PORT=4;
+    private const DSN_PREPARE_ALL=7;
+
+
     private string $schema;
     private PDO $pdo;
     public function __construct(string $schema)
