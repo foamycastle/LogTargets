@@ -4,6 +4,7 @@ namespace FoamyCastle\Log\File;
 
 use FoamyCastle\Log\Exception\PathNotWritable;
 use FoamyCastle\Log\Exception\TargetFileClearOpFailed;
+use FoamyCastle\Log\LogTarget;
 
 class FileTarget extends LogTarget
 {
